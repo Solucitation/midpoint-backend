@@ -478,8 +478,6 @@ public class PostService {
 
         int order = 1;
         for (Image image : images) {
-            System.out.println("image.getImageUrl() = " + image.getImageUrl());
-            System.out.println("order = " + order);
             image.setOrder(order++);
         }
         imageRepository.saveAll(images); // 이미지의 order 값을 데이터베이스에 반영

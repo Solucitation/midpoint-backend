@@ -50,10 +50,6 @@ public class SearchHistoryControllerV2 {
             String neighborhood = request.getNeighborhood();
             List<PlaceDtoV2> searchHistoryRequestDtos = request.getHistoryDto();
 
-            for (PlaceDtoV2 searchHistoryRequestDto : searchHistoryRequestDtos) {
-                System.out.println("searchHistoryRequestDto = " + searchHistoryRequestDto.getPlaceId());
-            }
-
             if (authentication == null || !authentication.isAuthenticated()) { // 인증 검증
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "UNAUTHORIZED", "message", "해당 서비스를 이용하기 위해서는 로그인이 필요합니다."));
