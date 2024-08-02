@@ -36,7 +36,6 @@ public class SearchHistoryServiceV2 {
                 .neighborhood(neighborhood)
                 .build();
 
-        System.out.println("placeDtos.size() = " + placeDtos.size());
         for (PlaceDtoV2 dto : placeDtos) {
             String imageUrl = dto.getImageUrl();
             if (imageUrl == null || imageUrl.trim().isEmpty()) { // 이미지 url이 없거나 공백
@@ -51,7 +50,6 @@ public class SearchHistoryServiceV2 {
                     .searchHistory(searchHistory) // searchHistory 필드 설정
                     .build();
             searchHistory.getPlaceList().add(placeInfo);
-            System.out.println("placeInfo = " + placeInfo);
         }
         searchHistoryRepository.save(searchHistory);
     }
