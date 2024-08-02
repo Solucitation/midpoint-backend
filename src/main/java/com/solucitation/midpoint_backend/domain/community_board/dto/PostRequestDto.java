@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostRequestDto {
+public class PostRequestDto { // 게시글 작성 시 사용하는 DTO
     private Long memberId;
 
     @NotBlank(message = "제목은 비워둘 수 없습니다.")

@@ -35,7 +35,7 @@ public class SearchHistoryControllerV2 {
 
     /**
      * 검색 기록을 저장합니다.
-     * 
+     *
      * @param authentication 인증 정보
      * @param request 검색 기록 저장에 필요한 정보 (동 정보, 장소 리스트)
      * @return 장소를 성공적으로 저장하면 201 CREATED를 반환합니다.

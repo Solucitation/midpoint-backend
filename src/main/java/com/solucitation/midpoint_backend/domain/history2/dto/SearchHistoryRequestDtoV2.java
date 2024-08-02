@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchHistoryRequestDtoV2 {
+public class SearchHistoryRequestDtoV2 { // 검색 기록 저장 시 사용하는 DTO
     @NotBlank
     private String neighborhood;
 

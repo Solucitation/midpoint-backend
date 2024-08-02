@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostUpdateDto {
+public class PostUpdateDto { // 게시글 수정 시 사용하는 DTO
     @Size(max=100, message="제목은 최대 100자까지 가능합니다.")
     private String title;
 

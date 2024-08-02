@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDetailDto {
+public class PostDetailDto { // 게시글 상세 조회에 사용하는 DTO
     private String nickname;
     private String profileImagerUrl;
     private String title;
