@@ -27,6 +27,13 @@ public class SearchHistoryServiceV2 {
     private final SearchHistoryRepositoryV2 searchHistoryRepository;
     private final MemberService memberService;
 
+    /**
+     * 검색 기록을 저장합니다.
+     * 
+     * @param neighborhood 동 정보
+     * @param memberEmail 사용자 정보
+     * @param placeDtos 장소 정보 리스트
+     */
     @Transactional
     public void save(String neighborhood, String memberEmail, List<PlaceDtoV2> placeDtos) {
         Member member = memberService.getMemberByEmail(memberEmail);
@@ -39,7 +46,7 @@ public class SearchHistoryServiceV2 {
         for (PlaceDtoV2 dto : placeDtos) {
             String imageUrl = dto.getImageUrl();
             if (imageUrl == null || imageUrl.trim().isEmpty()) { // 이미지 url이 없거나 공백
-                imageUrl = defaultImageUrl;
+                imageUrl = defaultImageUrl; // 해당 장소의 이미지가 존재하지 않을 경우 기본 이미지를 저장합니다.
             }
             
             PlaceInfoV2 placeInfo = PlaceInfoV2.builder()
@@ -47,13 +54,18 @@ public class SearchHistoryServiceV2 {
                     .placeId(dto.getPlaceId())
                     .address(dto.getPlaceAddress())
                     .imageUrl(imageUrl)
-                    .searchHistory(searchHistory) // searchHistory 필드 설정
+                    .searchHistory(searchHistory) // 연관관계 설정
                     .build();
             searchHistory.getPlaceList().add(placeInfo);
         }
         searchHistoryRepository.save(searchHistory);
     }
 
+    /**
+     * 사용자가 저장한 검색 기록을 전부 최신순부터 반환합니다.
+     * @param member 사용자
+     * @return 검색 기록 정보 리스트
+     */
     @Transactional(readOnly = true)
     public List<SearchHistoryResponseDtoV2> getHistory(Member member) {
         List<SearchHistoryV2> histories = searchHistoryRepository.findByMemberOrderBySearchDateDesc(member);
