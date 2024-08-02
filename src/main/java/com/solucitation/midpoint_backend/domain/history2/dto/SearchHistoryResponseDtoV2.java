@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchHistoryResponseDtoV2 {
     private String neighborhood;
-    private LocalDateTime serachTime;
+    private LocalDateTime searchTime;
     private List<PlaceDtoV2> places = new ArrayList<>();
 }
