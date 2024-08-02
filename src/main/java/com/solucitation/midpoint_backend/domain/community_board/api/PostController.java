@@ -109,10 +109,6 @@ public class PostController {
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
 
-            if (member == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-            }
-
             Boolean result = postService.changeLikes(memberEmail, postId);
 
             if (result) {
@@ -153,9 +149,6 @@ public class PostController {
 
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
-            if (member == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-            }
 
             Set<ConstraintViolation<PostRequestDto>> violations = validator.validate(postRequestDto);
             if (!violations.isEmpty()) {
@@ -202,9 +195,6 @@ public class PostController {
 
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
-            if (member == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-            }
 
             List<PostResponseDto> postResponseDto = postService.getMyAllPosts(member);
             return ResponseEntity.ok(postResponseDto);
@@ -237,9 +227,6 @@ public class PostController {
 
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
-            if (member == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-            }
 
             postService.deletePost(member, postId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("게시글을 성공적으로 삭제하였습니다.");
@@ -252,45 +239,6 @@ public class PostController {
                     .body("게시글 삭제 중 오류가 발생하였습니다."+ e.getMessage());
         }
     }
-
-//    @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<?> updatePost(@PathVariable Long postId,
-//                                        Authentication authentication,
-//                                        @RequestPart("postDto") String postUpdateDtoJson,
-//                                        @RequestPart(value = "postImages", required = false) List<MultipartFile> postImages) throws JsonProcessingException {
-//        try{
-//            PostUpdateDto postUpdateDto =  objectMapper.readValue(postUpdateDtoJson, PostUpdateDto.class);
-//
-//            if (authentication == null || !authentication.isAuthenticated()) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                        .body("해당 서비스를 이용하기 위해서는 로그인이 필요합니다.");
-//            }
-//
-//            String memberEmail = authentication.getName();
-//            Member member = memberService.getMemberByEmail(memberEmail);
-//            if (member == null) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-//            }
-//
-//            postUpdateDto.validate(); // 제목, 본문, 해시태그 검증
-//
-//            if (postImages != null && !postImages.isEmpty() && postImages.size() > 3)  { // 이미지 변경이 있는 경우
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지는 최대 3장까지 업로드 가능합니다.");
-//            }
-//
-//            postService.updatePost(postId, postUpdateDto, member, postImages);
-//
-//            return ResponseEntity.status(HttpStatus.OK).body("게시글을 성공적으로 수정했습니다.");
-//        }  catch (EntityNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 게시글이 존재하지 않습니다.");
-//        } catch (AccessDeniedException e) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 수정 중 오류가 발생하였습니다." + e.getMessage());
-//        }
-//    }
 
     @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updatePost(@PathVariable Long postId,
@@ -307,9 +255,6 @@ public class PostController {
 
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
-            if (member == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-            }
 
             int nowImageCnt = postService.getPostById(postId, member).getImages().size();
             int validImageCnt = 0;
