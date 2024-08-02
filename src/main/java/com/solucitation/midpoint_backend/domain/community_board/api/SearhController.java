@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -47,10 +48,11 @@ public class SearhController {
             List<PostResponseDto> postResponseDto = postService.getPostByPurpose(member, purposes);
             return ResponseEntity.ok(postResponseDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "CONDITION_NOT_MET", "message", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("게시글 검색 중 오류가 발생하였습니다. " + e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 검색 중 오류가 발생하였습니다."));
         }
     }
 
@@ -77,10 +79,11 @@ public class SearhController {
             List<PostResponseDto> postResponseDto = postService.getPostByQuery(member, query);
             return ResponseEntity.ok(postResponseDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "CONDITION_NOT_MET", "message", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("게시글 검색 중 오류가 발생하였습니다. " + e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 검색 중 오류가 발생하였습니다."));
         }
     }
 }
