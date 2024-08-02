@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,7 @@ public class PostController {
             return ResponseEntity.ok(postResponseDtos);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("게시글 조회 중 오류가 발생하였습니다 : " + e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 조회 중 오류가 발생하였습니다."));
         }
     }
 
@@ -83,7 +84,7 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 게시글이 존재하지 않습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("게시글 조회 중 오류가 발생하였습니다 : " + e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 조회 중 오류가 발생하였습니다."));
         }
     }
 
@@ -120,7 +121,7 @@ public class PostController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 게시글이 존재하지 않습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("좋아요 상태를 변경하는 중 오류가 발생하였습니다." + e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "좋아요 상태를 변경하는 중 오류가 발생하였습니다."));
         }
     }
 
@@ -173,7 +174,8 @@ public class PostController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 등록 중 오류가 발생하였습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 등록 중 오류가 발생하였습니다."));
         }
     }
 
@@ -200,7 +202,7 @@ public class PostController {
             return ResponseEntity.ok(postResponseDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("게시글 조회 중 오류가 발생하였습니다. " + e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 조회 중 오류가 발생하였습니다."));
         }
     }
 
@@ -236,7 +238,7 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("게시글 삭제 중 오류가 발생하였습니다."+ e.getMessage());
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 삭제 중 오류가 발생하였습니다."));
         }
     }
 
@@ -280,7 +282,8 @@ public class PostController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 수정 중 오류가 발생하였습니다." + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage(), "message", "게시글 수정 중 오류가 발생하였습니다."));
         }
     }
 }
