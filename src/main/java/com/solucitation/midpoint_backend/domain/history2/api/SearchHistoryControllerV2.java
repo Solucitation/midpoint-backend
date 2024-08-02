@@ -49,28 +49,24 @@ public class SearchHistoryControllerV2 {
             String neighborhood = request.getNeighborhood();
             List<PlaceDtoV2> searchHistoryRequestDtos = request.getHistoryDto();
 
-            System.out.println("ssearchHistoryRequestDtos.size()= " +searchHistoryRequestDtos.size());
             for (PlaceDtoV2 searchHistoryRequestDto : searchHistoryRequestDtos) {
                 System.out.println("searchHistoryRequestDto = " + searchHistoryRequestDto.getPlaceId());
             }
 
-            // neighborhood 검증
-            if (neighborhood == null || neighborhood.trim().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "EMPTY_FIELD", "message", "동 정보가 누락되었습니다."));
-            }
-
-            // 인증 검증
-            if (authentication == null || !authentication.isAuthenticated()) {
+            if (authentication == null || !authentication.isAuthenticated()) { // 인증 검증
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "UNAUTHORIZED", "message", "해당 서비스를 이용하기 위해서는 로그인이 필요합니다."));
+            }
+
+            if (neighborhood == null || neighborhood.trim().isEmpty()) { // neighborhood 검증
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("error", "EMPTY_FIELD", "message", "동 정보가 누락되었습니다."));
             }
 
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
 
-            // 리스트 내의 모든 요소에 대한 검증 수행
-            for (PlaceDtoV2 place : searchHistoryRequestDtos) {
+            for (PlaceDtoV2 place : searchHistoryRequestDtos) { // 리스트 내의 모든 요소에 대한 검증 수행
                 Set<ConstraintViolation<PlaceDtoV2>> violations = validator.validate(place);
                 if (!violations.isEmpty()) {
                     List<ValidationErrorResponse.FieldError> fieldErrors = violations.stream()
@@ -81,7 +77,6 @@ public class SearchHistoryControllerV2 {
                 }
             }
 
-            // 데이터 저장
             searchHistoryService.save(neighborhood, memberEmail, searchHistoryRequestDtos);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "장소를 저장하였습니다."));
 
@@ -116,10 +111,6 @@ public class SearchHistoryControllerV2 {
 
             String memberEmail = authentication.getName();
             Member member = memberService.getMemberByEmail(memberEmail);
-            if (member == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "USER_NOT_FOUND", "message", "사용자를 찾을 수 없습니다."));
-            }
 
             List<SearchHistoryResponseDtoV2> searchHistoryResponseDtos = searchHistoryService.getHistory(member);
             return ResponseEntity.ok(searchHistoryResponseDtos);
