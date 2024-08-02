@@ -42,7 +42,8 @@ public class PostController {
      * 이때 로그인되어 있으며 해당 게시글에 좋아요를 눌렀을 경우에는 PostResponseDto 내 likes 필드를 true로 반환합니다. (기본값 false)
      *
      * @param authentication 인증정보
-     * @return 성공 시 200 OK와 함께 게시글 목록을 반환하며, 실패 시 500 Internal Server Error를 반환합니다.
+     * @return 성공 시 200 OK와 함께 게시글 목록을 반환합니다.
+     *         실패 시 500 Internal Server Error를 반환합니다.
      */
     @GetMapping("")
     public ResponseEntity<?> getAllPosts(Authentication authentication) {
@@ -66,7 +67,9 @@ public class PostController {
      * 특정 게시글 내용 전체를 가져옵니다.
      *
      * @param postId 게시글 번호
-     * @return 성공 시 200 OK와 함께 게시글 상세 정보를 반환하며, 실패 시 404 Not Found 또는 500 Internal Server Error를 반환합니다.
+     * @return 성공 시 200 OK와 함께 게시글 상세 정보를 반환합니다.
+     *         게시글을 찾을 수 없을 때 404 Not Found 를 반환합니다.
+     *         기타 사유로 실패 시 500 Internal Server Error를 반환합니다.
      */
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(@PathVariable Long postId, Authentication authentication) {
@@ -96,7 +99,7 @@ public class PostController {
      * @param authentication 인증정보
      * @return 좋아요 상태 변경에 성공하면 200 ok를 반환합니다.
      *         로그인을 하지 않고 시도 시 401 Unauthorized 에러를 반환합니다.
-     *         사용자나 게시글을 찾을 수 없을 때는 404 Not Found 에러를 반환합니다.
+     *         게시글을 찾을 수 없을 때 404 Not Found 에러를 반환합니다.
      *         기타 이유로 상태 변경 실패 시 500 Internal Server Error를 반환합니다.
      */
     @PostMapping("/{postId}/likes")
@@ -138,7 +141,6 @@ public class PostController {
      *         로그인을 하지 않고 시도 시 401 Unauthorized 에러를 반환합니다.
      *         서로 다른 2개의 해시태그를 선택하지 않았을 시 400 BAD REQUEST 에러를 반환합니다.
      *         이미지를 업로드하지 않았거나 4장 이상 업로드 시도 시 400 BAD REQUEST 에러를 반환합니다.
-     *         사용자를 찾을 수 없을 때는 404 Not Found 에러를 반환합니다.
      *         기타 이유로 업로드 실패 시 500 Internal Server Error를 반환합니다.
      */
     @PostMapping(value = "",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -191,7 +193,6 @@ public class PostController {
      *
      * @param authentication 인증 정보
      * @return  성공 시 200 OK와 함께 게시글 목록을 반환합니다.
-     *          사용자를 찾을 수 없을 때는 404 Not Found 에러를 반환합니다.
      *          기타 이유로 조회 실패 시 500 Internal Server Error를 반환합니다.
      */
     @GetMapping("/mine")
@@ -220,7 +221,7 @@ public class PostController {
      * @param authentication 인증정보
      * @return 삭제 성공 시 204 No content 를 반환합니다.
      *         로그인을 하지 않고 시도 시 401 Unauthorized 에러를 반환합니다.
-     *         사용자나 게시글을 찾을 수 없을 때는 404 Not Found 에러를 반환합니다.
+     *         게시글을 찾을 수 없을 때는 404 Not Found 에러를 반환합니다.
      *         삭제하려는 글이 본인이 작성한 글이 아닐 경우 403 Forbidden 에러를 반환힙니다.
      *         기타 이유로 게시글 삭제 실패 시 500 Internal Server Error를 반환합니다.
      */
@@ -252,6 +253,20 @@ public class PostController {
         }
     }
 
+    /**
+     * 본인이 작성한 글을 수정합니다.
+     *
+     * @param postId 게시글 정보
+     * @param authentication 인증 정보
+     * @param postUpdateDtoJson 게시글 수정 정보 (제목, 본문, 해시태그, 삭제할 이미지 url)
+     * @param postImages 추가할 이미지 파일
+     * @return 게시글 수정 성공 시 200 ok를 반환합니다.
+     *         로그인을 하지 않고 시도 시 401 Unauthorized 에러를 반환합니다.
+     *         게시글을 찾을 수 없을 때는 404 Not Found 에러를 반환합니다.
+     *         삭제하려는 글이 본인이 작성한 글이 아닐 경우 403 Forbidden 에러를 반환힙니다.
+     *         게시글 수정 결과가 게시글의 조건을 충족하지 못할 경우 400 BAD REQUEST 에러를 반환합니다.
+     * @throws JsonProcessingException
+     */
     @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updatePost(@PathVariable Long postId,
                                         Authentication authentication,
